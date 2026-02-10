@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}تسجيل الدخول | لمحة AI{% endblock %}
+
+{% block content %}
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+        <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-indigo-50 rounded-full blur-[120px]"></div>
+        <div class="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-blue-50 rounded-full blur-[120px]"></div>
+    </div>
+
+    <div class="min-h-screen pt-32 pb-12 flex items-center justify-center px-4">
+        <div class="w-full max-w-[450px]"> 
+            <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-100 p-8 md:p-12">
+                
+                <div class="text-center mb-10">
+                    <div class="inline-flex w-14 h-14 bg-indigo-600 rounded-2xl items-center justify-center shadow-lg shadow-indigo-200 mb-4 transition-transform hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl font-black text-slate-900 leading-none">مرحباً بك في لمحة</h1>
+                    <p class="text-slate-400 mt-3 text-sm font-medium">سجل دخولك لمتابعة حسابك المالي</p>
+                </div>
+
+                <form method="post" class="space-y-5 text-right">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2 mr-1">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <p class="text-red-500 text-[10px] font-bold mt-1">{{ field.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-lg hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all active:scale-[0.98] mt-2">
+                        تسجيل دخول
+                    </button>
+                </form>
+
+                <div class="mt-8 pt-6 border-t border-slate-50 text-center">
+                    <p class="text-slate-500 text-sm">
+                        ليس لديك حساب؟ 
+                        <a href="{% url 'register' %}" class="text-indigo-600 font-bold hover:text-indigo-700">انشئ حسابا جديدا</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
