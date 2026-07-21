@@ -1,0 +1,76 @@
+    <div id="transactions-container" class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+        <div class="p-8 border-b border-slate-50 flex flex-col md:flex-row justify-between items-center gap-4">
+            <h3 class="font-black text-slate-800 text-lg">سجل العمليات الرقمية</h3>
+            
+            <div class="relative w-full md:w-80">
+                <input type="text" name="q" 
+                    value="{{ request.GET.q|default:'' }}" 
+                    hx-get="{% url 'dashboard' %}" 
+                    hx-trigger="keyup changed delay:500ms" 
+                    hx-target="#transactions-container" 
+                    hx-swap="outerHTML"
+                    hx-push-url="true"
+                    placeholder="ابحث برقم العملية ..." 
+                    class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-12 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none">
+                <svg class="w-5 h-4 text-slate-400 absolute right-4 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-right">
+                <thead class="bg-slate-50/50 text-slate-400 text-[10px] uppercase font-black tracking-widest">
+                    <tr>
+                        <th class="p-6">رقم العملية</th>
+                        <th class="p-6">المبلغ</th>
+                        <th class="p-6">التاريخ والوقت</th>
+                        <th class="p-6">الحالة</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                {% for tx in transactions %}
+                    <tr class="group hover:bg-slate-50/80 transition-all cursor-pointer">
+                        <td class="p-6 font-mono font-bold text-indigo-600 tracking-tighter">#{{ tx.ref_last_4 }}</td>
+                        <td class="p-6 font-black text-slate-900">{{ tx.amount|floatformat:0 }} <span class="text-xs font-normal">{% if user.settings.use_currency_symbols %} SDG {% else %} ج.س {% endif %}</span></td>
+                        <td class="p-6 text-slate-500 text-xs font-bold">{{ tx.transaction_date }}</td>
+                        <td class="p-6">
+                            <span class="{% if tx.type == 'in' %}bg-green-50 text-green-600 border-green-100{% else %}bg-red-50 text-red-600 border-red-100{% endif %} px-3 py-1 rounded-full text-[10px] font-black border">
+                                {{ tx.get_type_display }}
+                            </span>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4" class="p-10 text-center text-slate-400 font-bold italic">عذراً، لم نجد أي عمليات تطابق بحثك</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if transactions.paginator.num_pages > 1 %}
+        <div class="flex items-center justify-between px-8 py-4 bg-slate-50 border-t border-slate-100">
+            <div class="flex gap-2">
+                {% if transactions.has_next %}
+                    <a hx-get="?page={{ transactions.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" 
+                    hx-target="#transactions-container" 
+                    hx-swap="outerHTML"
+                    hx-push-url="true"
+                    class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-black text-slate-600 hover:bg-indigo-600 hover:text-white transition-all shadow-sm cursor-pointer">
+                        التالي
+                    </a>
+                {% endif %}
+                
+                {% if transactions.has_previous %}
+                    <a hx-get="?page={{ transactions.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" 
+                    hx-target="#transactions-container" 
+                    hx-swap="outerHTML"
+                    hx-push-url="true"
+                    class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-black text-slate-600 hover:bg-indigo-600 hover:text-white transition-all shadow-sm cursor-pointer">
+                        السابق
+                    </a>
+                {% endif %}
+            </div>
+            <span class="text-[10px] font-black text-slate-400 uppercase">
+                صفحة {{ transactions.number }} من {{ transactions.paginator.num_pages }}
+            </span>
+        </div>
+        {% endif %}
+    </div>

@@ -1,4 +1,4 @@
-# -- Active: 1772002693034@@127.0.0.1@3306@mysql
+
 """
 Django settings for lamha project.
 

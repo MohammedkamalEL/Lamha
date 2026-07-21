@@ -6,12 +6,22 @@
 
     <main class="max-w-7xl mx-auto px-4 py-12 flex flex-col items-center justify-center">
         
+<<<<<<< HEAD
         <div class="w-full max-w-2xl mb-6 text-left">
             <a href="{% url 'dashboard' %}" class="inline-flex  items-center gap-2 text-slate-400 hover:text-indigo-600 transition font-bold text-sm bg-white px-4 py-2 rounded-xl border border-slate-100 shadow-sm">
                 العودة للوحة التحكم
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m7 7l-7-7 7-7"/></svg>
             </a>
         </div>  
+=======
+        <div class="w-full max-w-2xl mb-6 text-right">
+            <a href="{% url 'dashboard' %}" class="inline-flex items-center gap-2 text-slate-400 hover:text-indigo-600 transition font-bold text-sm bg-white px-4 py-2 rounded-xl border border-slate-100 shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m7 7l-7-7 7-7"/></svg>
+                العودة للوحة التحكم
+            </a>
+        </div>
+
+>>>>>>> 9a7726ff3c79aedd394968656331281de038becf
         <div class="max-w-2xl w-full">
             <div class="bg-white rounded-[3rem] shadow-xl shadow-slate-200/50 border border-slate-100 p-8 md:p-12">
                 
@@ -56,7 +66,11 @@
                         <div class="relative border-2 border-dashed border-slate-200 rounded-[2.5rem] p-10 text-center hover:border-indigo-400 hover:bg-indigo-50/30 transition-all group cursor-pointer">
                             <input type="file" name="notification_image" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="fileInput" accept="image/*">
                             <div id="preview-container" class="space-y-4">
+<<<<<<< HEAD
                                 <div class="w-20 h-20 bg-slate-50 text-slate-400 rounded-3xl flex items-center justify-center mx-auto group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-lg">
+=======
+                                <div class="w-20 h-20 bg-slate-50 text-slate-400 rounded-3xl flex items-center justify-center mx-auto group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
+>>>>>>> 9a7726ff3c79aedd394968656331281de038becf
                                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                                 </div>
                                 <p class="text-slate-600 font-bold" id="file-name">اضغط هنا أو اسحب صورة الاشعار</p>
@@ -98,7 +112,10 @@
                 <label class="block text-xs font-bold text-slate-400 uppercase mb-1">التاريخ</label>
                 <input type="text" id="modalDate" class="w-full bg-transparent border-none p-0 text-lg font-bold text-slate-700 focus:ring-0">
             </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9a7726ff3c79aedd394968656331281de038becf
         </div>
 
         <div class="flex gap-4">
@@ -154,7 +171,10 @@
                 resultModal.classList.remove('hidden');
             } else {
                 alert("خطأ من السيرفر: " + (data.message || "فشلت المعالجة"));
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9a7726ff3c79aedd394968656331281de038becf
             }
         } catch (error) {
             console.error("خطأ في الاتصال:", error);
