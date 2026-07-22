@@ -20,9 +20,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-<<<<<<< HEAD
 
 # user name === > mohammedkamal
 # password == > 123
-=======
->>>>>>> 9a7726ff3c79aedd394968656331281de038becf

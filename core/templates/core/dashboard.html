@@ -12,11 +12,7 @@
                     <nav class="space-y-2">
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 px-4">القائمة</p>
                         
-<<<<<<< HEAD
                         <a href="{% url 'home' %}" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-100 transition">
-=======
-                        <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-100 transition">
->>>>>>> 9a7726ff3c79aedd394968656331281de038becf
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                             الرئيسية
                         </a>
@@ -26,18 +22,13 @@
                             إضافة إشعار
                         </a>
 
-<<<<<<< HEAD
                         <a href="#" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl font-bold text-slate-600 hover:bg-slate-50 transition">
-=======
-                        <a href="{% url 'settings' %}" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl font-bold text-slate-600 hover:bg-slate-50 transition">
->>>>>>> 9a7726ff3c79aedd394968656331281de038becf
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                             الإعدادات
                         </a>
 
                         <hr class="my-4 border-slate-100">
 
-<<<<<<< HEAD
                     <form action="{% url 'logout' %}" method="post" id="logout-form" class="hidden">
                         {% csrf_token %}
                     </form>
@@ -49,19 +40,6 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                             </svg>
                             تسجيل خروج
-=======
-                        <form action="{% url 'logout' %}" method="post" id="logout-form" class="hidden">
-                            {% csrf_token %}
-                        </form>
-
-                        <a href="javascript:void(0)" 
-                            onclick="document.getElementById('logout-form').submit();" 
-                            class="flex items-center gap-3 px-5 py-3.5 rounded-2xl font-bold text-red-500 hover:bg-red-50 transition">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                                </svg>
-                                تسجيل خروج
->>>>>>> 9a7726ff3c79aedd394968656331281de038becf
                         </a>
                     </nav>
                 </div>
@@ -72,20 +50,12 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
                         <p class="text-slate-400 text-xs font-bold mb-2">اجمالي وارد اليوم</p>
-<<<<<<< HEAD
                         <h3 class="text-2xl font-black text-green-600">{{ total_in_today|floatformat:0 }} <span class="text-xs font-normal">ج.س</span></h3>
                     </div>
 
                     <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
                         <p class="text-slate-400 text-xs font-bold mb-2">اجمالي صادر اليوم</p>
                         <h3 class="text-2xl font-black text-red-600">{{ total_out_today|floatformat:0 }} <span class="text-xs font-normal">ج.س</span></h3>
-=======
-                        <h3 class="text-2xl font-black text-green-600">{{ total_in_today|floatformat:0 }} <span class="text-xs font-normal">{% if user.settings.use_currency_symbols %} SDG {% else %} ج.س {% endif %}</span></h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                        <p class="text-slate-400 text-xs font-bold mb-2">اجمالي صادر اليوم</p>
-                        <h3 class="text-2xl font-black text-red-600">{{ total_out_today|floatformat:0 }} <span class="text-xs font-normal">{% if user.settings.use_currency_symbols %} SDG {% else %} ج.س {% endif %}</span></h3>
->>>>>>> 9a7726ff3c79aedd394968656331281de038becf
                     </div>
 
                     <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
@@ -95,11 +65,7 @@
 
                     <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
                         <p class="text-slate-400 text-xs font-bold mb-2">أكبر مبلغ اليوم</p>
-<<<<<<< HEAD
                         <h3 class="text-2xl font-black text-slate-900">{{ max_today|floatformat:0 }}<span class="text-xs font-normal">ج.س</span></h3>
-=======
-                        <h3 class="text-2xl font-black text-slate-900">{{ max_today|floatformat:0 }}<span class="text-xs font-normal">{% if user.settings.use_currency_symbols %} SDG {% else %} ج.س {% endif %}</span></h3>
->>>>>>> 9a7726ff3c79aedd394968656331281de038becf
                     </div>
                 </div>
 
@@ -107,11 +73,7 @@
                     <div class="bg-indigo-900 p-6 rounded-3xl text-white shadow-xl shadow-indigo-100 relative overflow-hidden">
                         <div class="relative z-10">
                             <p class="text-indigo-200 text-xs font-bold mb-2">إجمالي الوارد هذا الشهر</p>
-<<<<<<< HEAD
                             <h3 class="text-3xl font-black">{{ total_in_month|floatformat:0 }}<span class="text-sm font-light">ج.س</span></h3>
-=======
-                            <h3 class="text-3xl font-black">{{ total_in_month|floatformat:0 }}<span class="text-sm font-light">{% if user.settings.use_currency_symbols %} SDG {% else %} ج.س {% endif %}</span></h3>
->>>>>>> 9a7726ff3c79aedd394968656331281de038becf
                         </div>
                         <svg class="absolute left-[-20px] bottom-[-20px] w-32 h-32 text-white/5" fill="currentColor" viewBox="0 0 24 24"><path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
                     </div>
@@ -119,17 +81,12 @@
                     <div class="bg-slate-800 p-6 rounded-3xl text-white shadow-xl shadow-slate-100 relative overflow-hidden">
                         <div class="relative z-10">
                             <p class="text-slate-400 text-xs font-bold mb-2">إجمالي الصادر هذا الشهر</p>
-<<<<<<< HEAD
                             <h3 class="text-3xl font-black text-red-400">{{ total_out_month|floatformat:0 }}<span class="text-sm font-light text-white">ج.س</span></h3>
-=======
-                            <h3 class="text-3xl font-black text-red-400">{{ total_out_month|floatformat:0 }}<span class="text-sm font-light text-white">{% if user.settings.use_currency_symbols %} SDG {% else %} ج.س {% endif %}</span></h3>
->>>>>>> 9a7726ff3c79aedd394968656331281de038becf
                         </div>
                         <svg class="absolute left-[-20px] bottom-[-20px] w-32 h-32 text-white/5" fill="currentColor" viewBox="0 0 24 24"><path d="M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
                     </div>
                 </div>
 
-<<<<<<< HEAD
                 <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
                     <div class="p-8 border-b border-slate-50 flex flex-col md:flex-row justify-between items-center gap-4">
                         <h3 class="font-black text-slate-800 text-lg">سجل العمليات الرقمية</h3>
@@ -168,10 +125,6 @@
                             </tbody>
                         </table>
                     </div>
-=======
-                <div id="transactions-container">
-                    {% include 'core/partials/transactions_table.html' %}
->>>>>>> 9a7726ff3c79aedd394968656331281de038becf
                 </div>
 
             </main>

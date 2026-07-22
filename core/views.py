@@ -1,10 +1,10 @@
 from django.views.generic import TemplateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-=======
+
 from django.views.generic import TemplateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
->>>>>>> 9a7726ff3c79aedd394968656331281de038becf
+
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.contrib.auth import logout
