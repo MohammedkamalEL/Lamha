@@ -176,6 +176,21 @@ class SaveTransactionView(View):
             except:
                 clean_date = timezone.now().date()
 
+
+            is_duplicate = Transaction.objects.filter(
+                user=request.user,
+                ref_last_4=ref,
+                amount=amount,
+                transaction_date=clean_date
+            ).exists()
+
+            if is_duplicate:
+                return JsonResponse({
+                    'status': 'error', 
+                    'message': 'عذراً، هذا الإشعار تم حفظه ومسجل في النظام من قبل!'
+                })
+            
+
             Transaction.objects.create(
                 user=request.user,
                 amount=amount,
