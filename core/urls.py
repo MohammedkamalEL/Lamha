@@ -16,7 +16,7 @@ urlpatterns = [
     path('process-notification/', ProcessNotificationView.as_view(), name='process_notification'),
     path('save-transaction/', SaveTransactionView.as_view(), name='save_transaction'),
 
-    # Admin
+    # admin
     path('admin-panel/', admin_dashboard, name='admin_dashboard'),
     path('admin-panel/users/', admin_users_list, name='admin_users_list'),
     path('admin-panel/users/<int:user_id>/toggle/', admin_user_toggle_active, name='admin_user_toggle'),

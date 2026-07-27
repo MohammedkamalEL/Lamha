@@ -27,10 +27,7 @@ from django.contrib.auth.decorators import login_required
 
 
 def admin_required(view_func):
-    """
-    Decorator بسيط: يسمح فقط للمستخدمين الذين is_staff=True.
-    غير ذلك يتم تحويلهم إلى dashboard.
-    """
+
     @wraps(view_func)
     @login_required
     def _wrapped(request, *args, **kwargs):
@@ -204,11 +201,10 @@ class SaveTransactionView(View):
             return JsonResponse({'status': 'error', 'message': str(e)})
 
 
-# ============ Admin Views ============
+#  admin views 
 
 @admin_required
 def admin_dashboard(request):
-    """المهمة 1: إحصائيات عامة للأدمن."""
     total_users = User.objects.count()
     total_in = Transaction.objects.filter(type='in').aggregate(Sum('amount'))['amount__sum'] or 0
     total_out = Transaction.objects.filter(type='out').aggregate(Sum('amount'))['amount__sum'] or 0
@@ -226,7 +222,6 @@ def admin_dashboard(request):
 
 @admin_required
 def admin_users_list(request):
-    """المهمة 2: جدول المستخدمين مع بحث + تجميد + حذف."""
     query = request.GET.get('q', '').strip()
     users = User.objects.all().order_by('-date_joined')
 
@@ -244,7 +239,6 @@ def admin_users_list(request):
 
 @admin_required
 def admin_user_toggle_active(request, user_id):
-    """تجميد / إلغاء تجميد حساب مستخدم."""
     target_user = get_object_or_404(User, id=user_id)
 
     if target_user == request.user:
@@ -259,7 +253,6 @@ def admin_user_toggle_active(request, user_id):
 
 @admin_required
 def admin_user_delete(request, user_id):
-    """حذف حساب مستخدم نهائياً."""
     target_user = get_object_or_404(User, id=user_id)
 
     if target_user == request.user:
