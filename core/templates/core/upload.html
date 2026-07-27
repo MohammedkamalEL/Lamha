@@ -167,7 +167,7 @@
         resultModal.classList.add('hidden');
     }
 
-    async function saveToDatabase() {
+ async function saveToDatabase() {
     const btn = document.getElementById('confirmSaveBtn');
     btn.disabled = true;
     btn.innerText = "جاري الحفظ...";
@@ -176,8 +176,6 @@
     formData.append('amount', document.getElementById('modalAmount').value);
     formData.append('date', document.getElementById('modalDate').value);
     formData.append('ref_last_4', document.getElementById('modal_ref').value);
-
-
     formData.append('type', document.querySelector('input[name="transaction_type"]:checked').value);
     formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
@@ -186,14 +184,20 @@
             method: 'POST',
             body: formData
         });
+        
         const data = await response.json();
+        
         if (data.status === 'success') {
             window.location.href = '{% url "dashboard" %}';
         } else {
-            alert("حدث خطأ أثناء الحفظ");
+            alert(data.message);
+            window.location.href = '{% url "dashboard" %}';
         }
     } catch (error) {
+        console.error("Error:", error);
         alert("فشل الاتصال بالسيرفر");
+        btn.disabled = false;
+        btn.innerText = "تأكيد وحفظ";
     }
 }
 
