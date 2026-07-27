@@ -21,6 +21,25 @@ from django.db.models import Sum, Max, Q
 from django.utils import timezone
 
 
+from functools import wraps
+from django.shortcuts import redirect, get_object_or_404, render
+from django.contrib.auth.decorators import login_required
+
+
+def admin_required(view_func):
+    """
+    Decorator بسيط: يسمح فقط للمستخدمين الذين is_staff=True.
+    غير ذلك يتم تحويلهم إلى dashboard.
+    """
+    @wraps(view_func)
+    @login_required
+    def _wrapped(request, *args, **kwargs):
+        if not request.user.is_staff:
+            return redirect('dashboard')
+        return view_func(request, *args, **kwargs)
+    return _wrapped
+
+
 class HomeView(TemplateView):
     template_name = 'core/home.html'
 
@@ -184,3 +203,69 @@ class SaveTransactionView(View):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
 
+
+# ============ Admin Views ============
+
+@admin_required
+def admin_dashboard(request):
+    """المهمة 1: إحصائيات عامة للأدمن."""
+    total_users = User.objects.count()
+    total_in = Transaction.objects.filter(type='in').aggregate(Sum('amount'))['amount__sum'] or 0
+    total_out = Transaction.objects.filter(type='out').aggregate(Sum('amount'))['amount__sum'] or 0
+    total_volume = total_in + total_out
+
+    context = {
+        'total_users': total_users,
+        'total_in': total_in,
+        'total_out': total_out,
+        'total_volume': total_volume,
+        'total_transactions': Transaction.objects.count(),
+    }
+    return render(request, 'core/admin_dashboard.html', context)
+
+
+@admin_required
+def admin_users_list(request):
+    """المهمة 2: جدول المستخدمين مع بحث + تجميد + حذف."""
+    query = request.GET.get('q', '').strip()
+    users = User.objects.all().order_by('-date_joined')
+
+    if query:
+        users = users.filter(
+            Q(username__icontains=query) | Q(email__icontains=query)
+        )
+
+    context = {
+        'users': users,
+        'query': query,
+    }
+    return render(request, 'core/admin_users.html', context)
+
+
+@admin_required
+def admin_user_toggle_active(request, user_id):
+    """تجميد / إلغاء تجميد حساب مستخدم."""
+    target_user = get_object_or_404(User, id=user_id)
+
+    if target_user == request.user:
+        return redirect('admin_users_list')
+
+    if request.method == 'POST':
+        target_user.is_active = not target_user.is_active
+        target_user.save()
+
+    return redirect('admin_users_list')
+
+
+@admin_required
+def admin_user_delete(request, user_id):
+    """حذف حساب مستخدم نهائياً."""
+    target_user = get_object_or_404(User, id=user_id)
+
+    if target_user == request.user:
+        return redirect('admin_users_list')
+
+    if request.method == 'POST':
+        target_user.delete()
+
+    return redirect('admin_users_list')

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-5xl mx-auto pt-32 pb-16 px-4">
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-2xl font-bold text-slate-800">لوحة تحكم الأدمن</h1>
+        <a href="{% url 'admin_users_list' %}" class="text-sm font-bold text-indigo-600 hover:underline">
+            إدارة المستخدمين ←
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+            <p class="text-sm text-slate-500 font-bold mb-2">إجمالي المستخدمين</p>
+            <p class="text-3xl font-bold text-slate-800">{{ total_users }}</p>
+        </div>
+        <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+            <p class="text-sm text-slate-500 font-bold mb-2">إجمالي العمليات</p>
+            <p class="text-3xl font-bold text-slate-800">{{ total_transactions }}</p>
+        </div>
+        <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+            <p class="text-sm text-slate-500 font-bold mb-2">إجمالي الوارد</p>
+            <p class="text-3xl font-bold text-green-600">{{ total_in }}</p>
+        </div>
+        <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+            <p class="text-sm text-slate-500 font-bold mb-2">إجمالي الصادر</p>
+            <p class="text-3xl font-bold text-red-500">{{ total_out }}</p>
+        </div>
+    </div>
+
+    <div class="mt-6 bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+        <p class="text-sm text-slate-500 font-bold mb-2">إجمالي حجم العمليات (وارد + صادر)</p>
+        <p class="text-2xl font-bold text-indigo-600">{{ total_volume }}</p>
+    </div>
+</div>
+{% endblock %}
