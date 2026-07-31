@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block content %}
@@ -151,6 +152,8 @@
                 document.getElementById('modal_ref').value = data.ref_last_4;
                 
                 resultModal.classList.remove('hidden');
+            } else if (data.status === 'duplicate') {
+                alert(data.message || "هذا الإشعار مكرر وتم رفعه من قبل.");
             } else {
                 alert("خطأ من السيرفر: " + (data.message || "فشلت المعالجة"));
             }

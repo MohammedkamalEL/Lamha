@@ -121,11 +121,66 @@ def ocr_space_extract(image_file):
     return parsed_text
 
 
+# class ProcessNotificationView(View):
+#     def post(self, request, *args, **kwargs):
+#         if request.FILES.get('notification_image'):
+#             try:
+#                 image_file = request.FILES['notification_image']
+
+#                 image_file.seek(0)
+#                 try:
+#                     full_text = ocr_space_extract(image_file)
+#                 except Exception as e:
+#                     return JsonResponse({'status': 'error', 'message': f'فشل استخراج النص: {str(e)}'})
+
+#                 print("--- النص المستخرج (OCR.space) ---\n", full_text)
+
+#                 amount = "0.00"
+#                 amount_match = re.findall(r'(\d{1,3}(?:,\d{3})+(?:\.\d{2})?)', full_text)
+
+#                 if amount_match:
+#                     clean_amounts = [float(a.replace(',', '')) for a in amount_match]
+#                     amount = amount_match[clean_amounts.index(max(clean_amounts))]
+
+
+#                 date_match = re.search(r'(\d{2}-[A-Za-z]{3}-\d{4})', full_text)
+                
+#                 if date_match:
+#                     extracted_date = date_match.group(1)
+#                 else:
+#                     fallback = re.search(r'(\d{2}.{1,5}202[4-6])', full_text)
+
+#                     if fallback:
+#                         extracted_date = fallback.group(1)
+#                         extracted_date = re.sub(r'[^\d\-a-zA-Z]', '-', extracted_date)
+#                     else:
+#                         extracted_date = datetime.now().strftime('%d-%b-%Y')
+
+#                 ref_match = re.search(r'(\d{10,})', full_text)
+#                 if ref_match:
+#                     full_ref = ref_match.group(1)
+#                     ref_last_4 = full_ref[-4:] 
+#                 else:
+#                     ref_fallback = re.findall(r'\d+', full_text)
+#                     longest_num = max(ref_fallback, key=len) if ref_fallback else "0000"
+#                     ref_last_4 = longest_num[-4:]
+
+#                 return JsonResponse({
+#                     'status': 'success',
+#                     'amount': amount,
+#                     'date': extracted_date,
+#                     'ref_last_4': ref_last_4
+#                 })
+
+#             except Exception as e:
+#                 return JsonResponse({'status': 'error', 'message': str(e)})
+
 class ProcessNotificationView(View):
     def post(self, request, *args, **kwargs):
         if request.FILES.get('notification_image'):
             try:
                 image_file = request.FILES['notification_image']
+                t_type = request.POST.get('transaction_type', 'in')  # نوع العملية من الفورم
 
                 image_file.seek(0)
                 try:
@@ -142,9 +197,8 @@ class ProcessNotificationView(View):
                     clean_amounts = [float(a.replace(',', '')) for a in amount_match]
                     amount = amount_match[clean_amounts.index(max(clean_amounts))]
 
-
                 date_match = re.search(r'(\d{2}-[A-Za-z]{3}-\d{4})', full_text)
-                
+
                 if date_match:
                     extracted_date = date_match.group(1)
                 else:
@@ -159,11 +213,34 @@ class ProcessNotificationView(View):
                 ref_match = re.search(r'(\d{10,})', full_text)
                 if ref_match:
                     full_ref = ref_match.group(1)
-                    ref_last_4 = full_ref[-4:] 
+                    ref_last_4 = full_ref[-4:]
                 else:
                     ref_fallback = re.findall(r'\d+', full_text)
                     longest_num = max(ref_fallback, key=len) if ref_fallback else "0000"
                     ref_last_4 = longest_num[-4:]
+
+                # --- فحص التكرار قبل عرض المودال ---
+                try:
+                    clean_amount_val = amount.replace(',', '')
+                    clean_date_val = datetime.strptime(extracted_date, '%d-%b-%Y').date()
+                except:
+                    clean_date_val = None
+
+                is_duplicate = False
+                if clean_date_val:
+                    is_duplicate = Transaction.objects.filter(
+                        user=request.user,
+                        amount=clean_amount_val,
+                        transaction_date=clean_date_val,
+                        ref_last_4=ref_last_4,
+                        type=t_type
+                    ).exists()
+
+                if is_duplicate:
+                    return JsonResponse({
+                        'status': 'duplicate',
+                        'message': 'هذا الإشعار مكرر وتم رفعه من قبل.'
+                    })
 
                 return JsonResponse({
                     'status': 'success',
@@ -175,6 +252,30 @@ class ProcessNotificationView(View):
             except Exception as e:
                 return JsonResponse({'status': 'error', 'message': str(e)})
           
+
+# class SaveTransactionView(View):
+#     def post(self, request, *args, **kwargs):
+#         amount = request.POST.get('amount').replace(',', '')
+#         raw_date = request.POST.get('date')
+#         ref = request.POST.get('ref_last_4')
+#         t_type = request.POST.get('type')
+
+#         try:
+#             try:
+#                 clean_date = datetime.strptime(raw_date, '%d-%b-%Y').date()
+#             except:
+#                 clean_date = timezone.now().date()
+
+#             transaction = Transaction.objects.create(
+#                 user=request.user,
+#                 amount=amount,
+#                 transaction_date=clean_date,
+#                 ref_last_4=ref,
+#                 type=t_type
+#             )
+#             return JsonResponse({'status': 'success', 'message': 'تم حفظ العملية بنجاح!'})
+#         except Exception as e:
+#             return JsonResponse({'status': 'error', 'message': str(e)})
 
 class SaveTransactionView(View):
     def post(self, request, *args, **kwargs):
@@ -189,7 +290,22 @@ class SaveTransactionView(View):
             except:
                 clean_date = timezone.now().date()
 
-            transaction = Transaction.objects.create(
+            # التحقق من التكرار: نفس المستخدم + المبلغ + التاريخ + آخر 4 أرقام + النوع
+            is_duplicate = Transaction.objects.filter(
+                user=request.user,
+                amount=amount,
+                transaction_date=clean_date,
+                ref_last_4=ref,
+                type=t_type
+            ).exists()
+
+            if is_duplicate:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'هذا الإشعار مكرر بالفعل وتم تسجيله من قبل.'
+                })
+
+            Transaction.objects.create(
                 user=request.user,
                 amount=amount,
                 transaction_date=clean_date,
@@ -197,6 +313,7 @@ class SaveTransactionView(View):
                 type=t_type
             )
             return JsonResponse({'status': 'success', 'message': 'تم حفظ العملية بنجاح!'})
+
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
 
